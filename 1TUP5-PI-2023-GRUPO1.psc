@@ -7,7 +7,7 @@ Proceso  TUP5PI2023GRUPO1
 	
 	carga_datos_articulos(articulos)
 	Limpiar Pantalla
-	Escribir "1 - Cargar clientes"
+	Escribir "1 - Cargar cliente"
 	Escribir "2 - Buscar clientes"
 	Escribir "3 - Buscar articulos"
 	Escribir "4 - Ordenar clientea"
