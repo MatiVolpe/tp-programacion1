@@ -24,7 +24,7 @@ Proceso  TUP5PI2023GRUPO1
 			1:
 				carga_datos_clientes(clientes)
 			2:
-				//proceso_busqueda_clientes_dni
+				busqueda_clientes_dni(clientes)
 			3:
 				//proceso_busqueda_articulos_codigo
 			4:
@@ -124,3 +124,31 @@ SubProceso ordenamiento_clientes_apellido(clientes)
 		
 	FinPara
 FinSubProceso
+
+SubProceso busqueda_clientes_dni(clientes)
+	Definir dni, opc Como Caracter
+	Escribir "ingrese el dni del cliente que busca:"
+	leer dni
+	Definir i Como Entero
+	i = 0 
+	
+	mientras i <= 19 Hacer
+		si dni == clientes[i,0] Entonces
+			Escribir "Apellido: ", clientes[i,1], " Nombre: ", clientes[i,2]
+			Escribir "Estado: ", clientes[i,3]
+			i = 21
+		SiNo
+			si i == 19 Entonces
+				Escribir "El DNI buscado no corresponde a un cliente"
+				Escribir "Desea dar de alta este cliente? (S/N)"
+				leer opc
+				si opc == "S" o opc == "s" Entonces
+					carga_datos_clientes(clientes)
+				FinSi
+			FinSi
+		FinSi
+		i = i + 1
+		
+	FinMientras
+FinSubProceso
+	
