@@ -4,7 +4,7 @@ Proceso  TUP5PI2023GRUPO1
 	Dimension clientes[20,4]
 	Definir articulos Como Caracter
 	Dimension articulos[50,3]
-	Definir menu Como Entero
+	Definir menu, pos_codigo Como Entero
 	Definir val Como Caracter
 	carga_datos_articulos(articulos)//carga los articulos automaticamente
 	reinicio_base_clientes(clientes)//limpia la base de datos al inicio del programa
@@ -26,13 +26,13 @@ Proceso  TUP5PI2023GRUPO1
 			2:
 				busqueda_clientes_dni(clientes)
 			3:
-				//proceso_busqueda_articulos_codigo
+				busqueda_articulos_codigo(articulos)
 			4:
 				ordenamiento_clientes_apellido(clientes)
 			5:
-				//proceso_listado_clientes_apellido
+				listado_clientes_apellido(clientes)
 			6:
-				//proceso_listado_articulos_nombre
+				//listado_articulos_nombre(articulos)
 			7:
 				Escribir "Esta seguro que desea salir? (S/N)"
 				leer val
@@ -61,6 +61,7 @@ Proceso  TUP5PI2023GRUPO1
 FinProceso
 
 SubProceso carga_datos_clientes(clientes)
+	Definir i Como Entero
 	para i = 0 Hasta 19 con paso 1 Hacer
 		si (clientes[i,0] == " ") Entonces
 			Escribir "Ingrese el DNI del cliente"
@@ -80,7 +81,9 @@ SubProceso carga_datos_clientes(clientes)
 	
 	
 FinSubProceso
+
 subProceso carga_datos_articulos(articulos)
+	Definir i Como Entero
 	Para i = 0 Hasta 49 Con Paso 1 Hacer
 		articulos[i,0] = ConvertirATexto(i+1)
 		articulos[i,1] = concatenar("Articulo",articulos[i,0])
@@ -98,7 +101,7 @@ SubProceso reinicio_base_clientes(clientes)
 FinSubProceso
 
 SubProceso ordenamiento_clientes_apellido(clientes)
-	Definir pos_menor, dim Como Entero
+	Definir pos_menor, dim, i, j Como Entero
 	Definir nom_ape,aux Como Caracter
 	Dimension nom_ape[20]
 	para i = 0 Hasta 19 Con Paso 1 Hacer
@@ -126,6 +129,7 @@ SubProceso ordenamiento_clientes_apellido(clientes)
 FinSubProceso
 
 SubProceso busqueda_clientes_dni(clientes)
+	Definir i Como Entero
 	Definir dni, opc Como Caracter
 	Escribir "ingrese el dni del cliente que busca:"
 	leer dni
@@ -151,4 +155,71 @@ SubProceso busqueda_clientes_dni(clientes)
 		
 	FinMientras
 FinSubProceso
+
+
+SubProceso ordenamiento_articulos_cod(articulos)
+	Definir pos_menor, i, j Como Entero
+	Definir aux Como Caracter
+	Dimension aux[3]
+	
+	Para i=0 Hasta 48 Hacer
+		pos_menor = i
+		Para j=i+1 Hasta 49 Hacer
+			Si articulos[j,0] < articulos[pos_menor,0] Entonces
+				pos_menor <- j
+			FinSi
+		FinPara
+		aux[0] <- articulos[i,0]
+		aux[1] <- articulos[i,1]
+		aux[2] <- articulos[i,2]
+		articulos[i,0] <- articulos[pos_menor,0]
+		articulos[i,1] <- articulos[pos_menor,1]
+		articulos[i,2] <- articulos[pos_menor,2]
+		articulos[pos_menor,0] <- aux[0]
+		articulos[pos_menor,1] <- aux[1]
+		articulos[pos_menor,2] <- aux[2]
+	FinPara
+FinSubProceso
+
+
+SubProceso busqueda_articulos_codigo(articulos)
+	ordenamiento_articulos_cod(articulos)
+	Definir cod, inicio, final, medio Como Entero
+	Definir encontrado Como Logico
+	Escribir "Ingrese el codigo del articulo que desea encontrar"
+	Leer cod
+	inicio = 0
+	final = 49
+	encontrado = Falso
+	
+	Mientras inicio <= final y !encontrado Hacer
+		medio = trunc((inicio + final)/2)
+		si (articulos[medio,0] == ConvertirATexto(cod))
+			encontrado = Verdadero
+		SiNo
+			si ConvertirANumero(articulos[medio,0]) < cod
+				inicio = medio + 1
+			SiNo
+				final = medio - 1
+			FinSi
+		FinSi
+	FinMientras
+	
+	si encontrado Entonces
+		Escribir "Codigo encontrado, el articulo es:"
+		Escribir "Codigo: ", articulos[medio,0],"--- ", articulos[medio,1]," --- $", articulos[medio,2]
+	SiNo
+		Escribir "El codigo ingresado no corresponde a ningun articulo"
+	FinSi
+FinSubProceso
+
+
+SubProceso listado_clientes_apellido(clientes)
+	Definir i Como Entero
+	ordenamiento_clientes_apellido(clientes)
+	Para i=0 Hasta 19 Hacer
+		Escribir "DNI: ", clientes[i,0]," --- ", clientes[i,1]," ", clientes[i,2], ", Estado: ", clientes[i,3]
+	FinPara
+FinSubProceso
+
 	
