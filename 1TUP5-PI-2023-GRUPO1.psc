@@ -86,7 +86,8 @@ SubProceso ordenamiento_clientes_apellido(clientes)
 	Definir nom_ape,aux Como Caracter
 	Dimension nom_ape[20]
 	para i = 0 Hasta 19 Con Paso 1 Hacer
-		nom_ape[i] = Concatenar(clientes[i,1], clientes [i,2])
+		nom_ape[i] = Concatenar(clientes[i,1]," ")
+		nom_ape[i] = Concatenar(nom_ape[i], clientes [i,2])
 	FinPara
 	dim = 19
 	
@@ -103,7 +104,7 @@ SubProceso ordenamiento_clientes_apellido(clientes)
 	FinPara
 	para i = 0 hasta 19 Con Paso 1 Hacer
 		si nom_ape[i] <> " " Entonces
-			Escribir "Cliente =", nom_ape[i]
+			Escribir "Cliente = ", nom_ape[i]
 		FinSi
 		
 	FinPara
@@ -114,7 +115,6 @@ SubProceso busqueda_clientes_dni(clientes)
 	Definir dni, opc Como Caracter
 	Escribir "ingrese el dni del cliente que busca:"
 	leer dni
-	Definir i Como Entero
 	i = 0 
 	
 	mientras i <= 19 Hacer
