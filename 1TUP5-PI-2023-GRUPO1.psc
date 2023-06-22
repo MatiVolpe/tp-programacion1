@@ -3,7 +3,7 @@ Proceso  TUP5PI2023GRUPO1
 	Definir clientes Como Caracter
 	Dimension clientes[20,4]
 	Definir articulos Como Caracter
-	Dimension articulos[50,3]
+	Dimension articulos[30,3]
 	Definir menu, pos_codigo Como Entero
 	Definir val Como Caracter
 	carga_datos_articulos(articulos)//carga los articulos automaticamente
@@ -17,8 +17,9 @@ Proceso  TUP5PI2023GRUPO1
 		Escribir "3 - Buscar articulos"
 		Escribir "4 - Ordenar clientes"
 		Escribir "5 - Listado clientes"
-		Escribir "6 - Listado articulos"
-		Escribir "7 - Salir"
+		Escribir "6 - Ordenar articulos"
+		Escribir "7 - Listado articulos"
+		Escribir "8 - Salir"
 		Escribir " "
 		Escribir "Elija una opcion"
 		Escribir "<--------------------->"
@@ -35,8 +36,11 @@ Proceso  TUP5PI2023GRUPO1
 			5:
 				listado_clientes_apellido(clientes)
 			6:
-				//listado_articulos_nombre(articulos)
-			7:
+				ordenamiento_articulos_cod(articulos)
+				Escribir "Ordenando base de datos de articulos por codigo..."
+			7: 
+				mostrar_articulos(articulos)	
+			8:
 				Escribir "Esta seguro que desea salir? (S/N)"
 				leer val
 				si val == "S" o val == "s" Entonces
@@ -47,7 +51,7 @@ Proceso  TUP5PI2023GRUPO1
 			De Otro Modo:
 				Escribir "Ingrese una opcion correcta"
 		FinSegun
-	Mientras Que menu <> 7
+	Mientras Que menu <> 8
 	
 	//proceso_listado_articulos_nombre
 	//proceso_validacion_dni
@@ -143,9 +147,9 @@ SubProceso ordenamiento_articulos_cod(articulos)
 	Definir aux Como Caracter
 	Dimension aux[3]
 	
-	Para i=0 Hasta 48 Hacer
+	Para i=0 Hasta 28 Hacer
 		pos_menor = i
-		Para j=i+1 Hasta 49 Hacer
+		Para j=i+1 Hasta 29 Hacer
 			Si articulos[j,0] < articulos[pos_menor,0] Entonces
 				pos_menor <- j
 			FinSi
@@ -170,7 +174,7 @@ SubProceso busqueda_articulos_codigo(articulos)
 	Escribir "Ingrese el codigo del articulo que desea encontrar"
 	Leer cod
 	inicio = 0
-	final = 49
+	final = 29
 	encontrado = Falso
 	
 	Mientras inicio <= final y !encontrado Hacer
@@ -197,7 +201,7 @@ FinSubProceso
 
 SubProceso listado_clientes_apellido(clientes)
 	Definir i Como Entero
-	//ordenamiento_clientes_apellido(clientes)
+	ordenamiento_clientes_apellido(clientes)
 	Escribir "<---------------------------------------------------->"
 	Para i=0 Hasta 19 Hacer
 		Si clientes[i,0] <> " " Entonces
@@ -207,6 +211,15 @@ SubProceso listado_clientes_apellido(clientes)
 		Fin Si
 	FinPara
 	Escribir "<---------------------------------------------------->"
+FinSubProceso
+
+SubProceso mostrar_articulos(articulos)
+
+	Para i = 0 Hasta 29 Con Paso 1 Hacer
+		Escribir "Codigo: ", articulos[i,0],"--- ", articulos[i,1]," --- $", articulos[i,2]
+	Fin Para
+	
+	
 FinSubProceso
 
 //Subproceso para cargar "Base de datos" de clientes
@@ -226,7 +239,7 @@ SubProceso base_datos_clientes(clientes)
 	clientes[2,3] = "ACTIVO"
 	clientes[3,0] = "32865112"
 	clientes[3,1] = "Acevedo"
-	clientes[3,2] = "Aguntin"
+	clientes[3,2] = "Agustin"
 	clientes[3,3] = "ACTIVO"
 	clientes[4,0] = "24369522"
 	clientes[4,1] = "Ocampo"
@@ -274,7 +287,7 @@ subProceso carga_datos_articulos(articulos)
 	articulos[5,0] = "1581"
 	articulos[5,1] = "PC1832 PLACA PCB"
 	articulos[5,2] = "147.40"
-	articulos[6,0] = "Codigo: 1649"
+	articulos[6,0] = "1649"
 	articulos[6,1] = "PANEL 6 ZONAS S/TEC S/TRAF S/GAB"
 	articulos[6,2] = "100.00"
 	articulos[7,0] = "0935"
