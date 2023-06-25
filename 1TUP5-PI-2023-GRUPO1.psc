@@ -1,60 +1,17 @@
 Proceso  TUP5PI2023GRUPO1
 	
+	mensaje_bienvenida
 	Definir clientes Como Caracter
 	Dimension clientes[20,4]
 	Definir articulos Como Caracter
 	Dimension articulos[30,3]
-	Definir menu, pos_codigo Como Entero
-	Definir val Como Caracter
 	carga_datos_articulos(articulos)//carga los articulos automaticamente
-	reinicio_base_clientes(clientes)//limpia la base de datos al inicio del programa
+	reinicio_base_clientes(clientes)//limpia la base de datos de clientes al inicio del programa
 	base_datos_clientes(clientes)//carga base de datos de clientes
-	Repetir
-		//Limpiar Pantalla
-		Escribir "<--------------------->"
-		Escribir "1 - Cargar cliente"
-		Escribir "2 - Buscar clientes"
-		Escribir "3 - Buscar articulos"
-		Escribir "4 - Ordenar clientes"
-		Escribir "5 - Listado clientes"
-		Escribir "6 - Ordenar articulos"
-		Escribir "7 - Listado articulos"
-		Escribir "8 - Salir"
-		Escribir " "
-		Escribir "Elija una opcion"
-		Escribir "<--------------------->"
-		leer menu
-		Segun menu
-			1:
-				carga_datos_clientes(clientes)
-			2:
-				busqueda_clientes_dni(clientes)
-			3:
-				busqueda_articulos_codigo(articulos)
-			4:
-				ordenamiento_clientes_apellido(clientes)
-			5:
-				listado_clientes_apellido(clientes)
-			6:
-				ordenamiento_articulos_cod(articulos)
-				Escribir "Ordenando base de datos de articulos por codigo..."
-			7: 
-				mostrar_articulos(articulos)	
-			8:
-				Escribir "Esta seguro que desea salir? (S/N)"
-				leer val
-				si val == "S" o val == "s" Entonces
-					Escribir "Gracias por usar el sistema"
-				SiNo
-					menu = -1
-				FinSi
-			De Otro Modo:
-				Escribir "Ingrese una opcion correcta"
-		FinSegun
-	Mientras Que menu <> 8
 	
-	//proceso_listado_articulos_nombre
-	//proceso_validacion_dni
+	menu_empresa(clientes,articulos)
+	
+
 FinProceso
 
 SubProceso carga_datos_clientes(clientes)
@@ -70,25 +27,30 @@ SubProceso carga_datos_clientes(clientes)
 			Escribir "Procesando..."
 			Esperar 1 Segundos			
 		Mientras Que (validar_dni(dni) <> 1)
-	FinSi
-	rep = validar_repetido(dni, clientes) //se fija que el dni no se repita, si no se repite retorna 0 y si se repite retorna la posicion
-	si (rep == 0) Entonces
-		clientes[num,0] = ConvertirATexto(dni)
-		Escribir "Ingrese el Apellido del cliente"
-		leer clientes[num,1]
-		Escribir "Ingrese el Nombre del cliente"
-		leer clientes[num,2]
-		clientes[num,3] = "ACTIVO"
-	SiNo
-		Escribir "El cliente ya existe. Desea modificarlo? (S/N)"
-		Escribir "DNI: ", clientes[rep,0]," --- ", clientes[rep,1]," " clientes[rep,2], ", Estado: ", clientes[rep,3]
-		leer respuesta
-		si respuesta == "S" o respuesta == "s" Entonces
-			modificar_cliente(dni, clientes, rep )
+		rep = validar_repetido(dni, clientes) //se fija que el dni no se repita, si no se repite retorna 0 y si se repite retorna la posicion
+		si (rep == 0) Entonces
+			clientes[num,0] = ConvertirATexto(dni)
+			Escribir "Ingrese el Apellido del cliente"
+			leer clientes[num,1]
+			Escribir "Ingrese el Nombre del cliente"
+			leer clientes[num,2]
+			clientes[num,3] = "ACTIVO"
+			Escribir "El cliente se guardo con exito."
+			Esperar Tecla
 		SiNo
-			Escribir "El cliente no se modificara"
-		FinSi		
+			Escribir "El cliente ya existe. Desea modificarlo? (S/N)"
+			Escribir "DNI: ", clientes[rep,0]," --- ", clientes[rep,1]," " clientes[rep,2], ", Estado: ", clientes[rep,3]
+			leer respuesta
+			si respuesta == "S" o respuesta == "s" Entonces
+				modificar_cliente(dni, clientes, rep )
+			SiNo
+				Escribir "El cliente no se modificara"	
+				Esperar Tecla
+			FinSi		
+		FinSi
 	FinSi
+	
+
 FinSubProceso
 
 Funcion espacio <- validar_espacio(clientes)
@@ -134,6 +96,8 @@ SubProceso modificar_cliente(dni, clientes, i)
 	Escribir "Ingrese el Nombre del cliente"
 	leer clientes[i,2]
 	clientes[i,3] = "ACTIVO"	
+	Escribir "El cliente se modificó con exito."
+	Esperar Tecla
 FinSubProceso
 
 SubProceso reinicio_base_clientes(clientes)
@@ -144,6 +108,8 @@ FinSubProceso
 
 //proceso_listado_clientes_apellido
 SubProceso ordenamiento_clientes_apellido(clientes)
+	
+	Limpiar Pantalla
 	Definir pos_menor, dim, i, j Como Entero
 	Definir nom_ape,aux Como Caracter
 	Dimension nom_ape[20]
@@ -164,26 +130,34 @@ SubProceso ordenamiento_clientes_apellido(clientes)
 		nom_ape[i] <- nom_ape[pos_menor]
 		nom_ape[pos_menor] <- aux
 	FinPara
+	Escribir "A continuación se muestran los clientes ordenados por apellido"
+	Escribir " "
+	Esperar 1 Segundos
+	Escribir "<---------------------------------------------------->"
 	para i = 0 hasta 19 Con Paso 1 Hacer
 		si nom_ape[i] <> " " Entonces
 			Escribir "Cliente = ", nom_ape[i]
-		FinSi
-		
+		FinSi		
 	FinPara
+	Escribir "<---------------------------------------------------->"
+	Esperar Tecla
 FinSubProceso
 //proceso_busqueda_clientes_dni
 SubProceso busqueda_clientes_dni(clientes)
+	Limpiar Pantalla
 	Definir i Como Entero
 	Definir dni, opc Como Caracter
-	Escribir "ingrese el dni del cliente que busca:"
+	Escribir "Ingrese el DNI del cliente a buscar:"
 	leer dni
 	i = 0 
 	
 	mientras i <= 19 Hacer
 		si dni == clientes[i,0] Entonces
+			Escribir "Cliente encontrado"
 			Escribir "Apellido: ", clientes[i,1], " Nombre: ", clientes[i,2]
 			Escribir "Estado: ", clientes[i,3]
 			i = 21
+			Esperar Tecla
 		SiNo
 			si i == 19 Entonces
 				Escribir "El DNI buscado no corresponde a un cliente"
@@ -192,6 +166,7 @@ SubProceso busqueda_clientes_dni(clientes)
 				si opc == "S" o opc == "s" Entonces
 					carga_datos_clientes(clientes)
 				FinSi
+				esperar 1 Segundos
 			FinSi
 		FinSi
 		i = i + 1
@@ -229,6 +204,7 @@ SubProceso busqueda_articulos_codigo(articulos)
 	ordenamiento_articulos_cod(articulos)
 	Definir cod, inicio, final, medio Como Entero
 	Definir encontrado Como Logico
+	Limpiar Pantalla
 	Escribir "Ingrese el codigo del articulo que desea encontrar"
 	Leer cod
 	inicio = 0
@@ -254,12 +230,16 @@ SubProceso busqueda_articulos_codigo(articulos)
 	SiNo
 		Escribir "El codigo ingresado no corresponde a ningun articulo"
 	FinSi
+	Esperar Tecla
 FinSubProceso
 
 
 SubProceso listado_clientes_apellido(clientes)
 	Definir i Como Entero
-	//ordenamiento_clientes_apellido(clientes)
+	Limpiar Pantalla
+	Escribir "Listado de clientes"
+	esperar 1 Segundos
+	Escribir " "
 	Escribir "<---------------------------------------------------->"
 	Para i=0 Hasta 19 Hacer
 		Si clientes[i,0] <> " " Entonces
@@ -269,14 +249,22 @@ SubProceso listado_clientes_apellido(clientes)
 		Fin Si
 	FinPara
 	Escribir "<---------------------------------------------------->"
+	Esperar Tecla
 FinSubProceso
 
 SubProceso mostrar_articulos(articulos)
+	Limpiar Pantalla
+	Escribir "A continuación se muestran los articulos"
+	Escribir " "
+	Esperar 1 Segundos
+	Escribir "<---------------------------------------------------->"
 
 	Para i = 0 Hasta 29 Con Paso 1 Hacer
 		Escribir "Codigo: ", articulos[i,0],"--- ", articulos[i,1]," --- $", articulos[i,2]
 	Fin Para
-	
+	Escribir "<---------------------------------------------------->"
+	Esperar Tecla
+
 	
 FinSubProceso
 
@@ -333,13 +321,13 @@ subProceso carga_datos_articulos(articulos)
 	articulos[1,0] = "4584"
 	articulos[1,1] = "PC1832 + TECLADO PC155S5 + PC5002C GAB METAL"
 	articulos[1,2] = "225.50"
-	articulos[2,0] = "0558"
+	articulos[2,0] = "3558"
 	articulos[2,1] = "PC1832/PK5500"
 	articulos[2,2] = "324.54"
 	articulos[3,0] = "2075"
 	articulos[3,1] = "PC183/2CLC14ARG"
 	articulos[3,2] = "228.50"
-	articulos[4,0] = "0753"
+	articulos[4,0] = "4753"
 	articulos[4,1] = "PC1832 + TECLADO PK5501 + GAB + TRAF"
 	articulos[4,2] = "244.00"
 	articulos[5,0] = "1581"
@@ -348,7 +336,7 @@ subProceso carga_datos_articulos(articulos)
 	articulos[6,0] = "1649"
 	articulos[6,1] = "PANEL 6 ZONAS S/TEC S/TRAF S/GAB"
 	articulos[6,2] = "100.00"
-	articulos[7,0] = "0935"
+	articulos[7,0] = "9935"
 	articulos[7,1] = "PANEL 8 ZONAS CON GABINETE S/TECLADO"
 	articulos[7,2] = "77.50"
 	articulos[8,0] = "3077"
@@ -360,7 +348,7 @@ subProceso carga_datos_articulos(articulos)
 	articulos[10,0] = "2657"
 	articulos[10,1] = "TECLADO ALFANUMERICO C/RX INALAMB 64ZONAS"
 	articulos[10,2] = "198.20"
-	articulos[11,0] = "0098"
+	articulos[11,0] = "9998"
 	articulos[11,1] = "TECLADO LEDS 8 ZONAS PARA POWER SERIES"
 	articulos[11,2] = "67.60"
 	articulos[12,0] = "1404"
@@ -420,3 +408,66 @@ subProceso carga_datos_articulos(articulos)
 	
 	
 FinSubProceso
+
+SubProceso mensaje_bienvenida
+	Limpiar Pantalla
+	Escribir "------------------------------------------------------------------------"
+	Escribir "  Bienvenido al software de gestion de empresa de seguridad electronica "
+	Escribir "------------------------------------------------------------------------"
+	Esperar Tecla
+FinSubProceso
+
+SubProceso menu_empresa(clientes, articulos)
+	Definir pos_codigo Como Entero
+	Definir menu, val Como Caracter
+	Repetir
+		Limpiar Pantalla
+		Escribir "<--------------------->"
+		Escribir "1 - Cargar cliente"
+		Escribir "2 - Buscar clientes"
+		Escribir "3 - Buscar articulos"
+		Escribir "4 - Ordenar clientes"
+		Escribir "5 - Listado clientes"
+		Escribir "6 - Ordenar articulos"
+		Escribir "7 - Listado articulos"
+		Escribir "8 - Salir"
+		Escribir " "
+		Escribir "Elija una opcion"
+		Escribir "<--------------------->"
+		leer menu
+		Segun menu
+			"1":
+				carga_datos_clientes(clientes)
+			"2":
+				busqueda_clientes_dni(clientes)
+			"3":
+				busqueda_articulos_codigo(articulos)
+			"4":
+				ordenamiento_clientes_apellido(clientes)
+			"5":
+				listado_clientes_apellido(clientes)
+			"6":
+				ordenamiento_articulos_cod(articulos)
+				Limpiar Pantalla
+				Escribir "<---------------------------------------------------->"
+				Escribir "Ordenando base de datos de articulos por codigo..."
+				Esperar 2 Segundos
+				Escribir "<---------------------------------------------------->"
+				Escribir "Articulos ordenados con éxito."
+				Esperar Tecla
+			"7": 
+				mostrar_articulos(articulos)	
+			"8":
+				Escribir "Esta seguro que desea salir? (S/N)"
+				leer val
+				si val == "S" o val == "s" Entonces
+					Escribir "Gracias por usar el sistema"
+				SiNo
+					menu = "-1"
+				FinSi
+			De Otro Modo:
+				Escribir "Ingrese una opcion correcta"
+		FinSegun
+	Mientras Que menu <> "8"
+FinSubProceso
+	
