@@ -58,25 +58,83 @@ Proceso  TUP5PI2023GRUPO1
 FinProceso
 
 SubProceso carga_datos_clientes(clientes)
-	Definir i Como Entero
-	para i = 0 Hasta 19 con paso 1 Hacer
-		si (clientes[i,0] == " ") Entonces
+	Definir num, dni, rep Como Entero
+	num = validar_espacio(clientes) //se fija si hay lugar en la base, si no hay lugar retorna -1, si hay lugar te da la ultima posicion(por eso guardo en una variable el resultado de la funcion)
+	si (num == -1) Entonces
+		Escribir "La base de datos esta completa. No se pueden ingresar mas clientes"
+	SiNo
+		Repetir
+			Limpiar Pantalla
 			Escribir "Ingrese el DNI del cliente"
-			leer clientes[i,0]
-			Escribir "Ingrese el Apellido del cliente"
-			leer clientes[i,1]
-			Escribir "Ingrese el Nombre del cliente"
-			leer clientes[i,2]
-			clientes[i,3] = "ACTIVO"
+			leer dni
+			Escribir "Procesando..."
+			Esperar 1 Segundos			
+		Mientras Que (validar_dni(dni) <> 1)
+	FinSi
+	rep = validar_repetido(dni, clientes) //se fija que el dni no se repita, si no se repite retorna 0 y si se repite retorna la posicion
+	si (rep == 0) Entonces
+		clientes[num,0] = ConvertirATexto(dni)
+		Escribir "Ingrese el Apellido del cliente"
+		leer clientes[num,1]
+		Escribir "Ingrese el Nombre del cliente"
+		leer clientes[num,2]
+		clientes[num,3] = "ACTIVO"
+	SiNo
+		Escribir "El cliente ya existe. Desea modificarlo? (S/N)"
+		Escribir "DNI: ", clientes[rep,0]," --- ", clientes[rep,1]," " clientes[rep,2], ", Estado: ", clientes[rep,3]
+		leer respuesta
+		si respuesta == "S" o respuesta == "s" Entonces
+			modificar_cliente(dni, clientes, rep )
+		SiNo
+			Escribir "El cliente no se modificara"
+		FinSi		
+	FinSi
+FinSubProceso
+
+Funcion espacio <- validar_espacio(clientes)
+	para i = 0 Hasta 19 Con Paso 1 Hacer
+		si (clientes[i,0] == " ") Entonces
+			espacio = i
 			i = 20
 		SiNo
-			si i == 19
-				Escribir "La base de datos esta completa. No se pueden ingresar mas clientes"
+			si i == 19 Entonces
+				espacio = -1
 			FinSi
 		FinSi
 	FinPara
-FinSubProceso
+FinFuncion
 
+Funcion dni_ok <- validar_dni(dni)
+	Definir respuesta Como Caracter
+	si (dni > 1000000 y dni < 99999999) Entonces
+		dni_ok = 1
+	SiNo
+		Escribir "El numero ingresado es incorrecto."
+		Escribir "Intente nuevamente"
+		Esperar Tecla
+		dni_ok = 0
+	FinSi
+FinFuncion
+
+Funcion repetido <- validar_repetido(dni, clientes)	
+	para j = 0 hasta 19 Con Paso 1 Hacer
+		si (clientes[j,0] == ConvertirATexto(dni)) Entonces
+			repetido = j
+			j = 20
+		SiNo
+			repetido = 0
+		FinSi
+	FinPara
+FinFuncion
+
+SubProceso modificar_cliente(dni, clientes, i)
+	clientes[i,0] = ConvertirATexto(dni)
+	Escribir "Ingrese el Apellido del cliente"
+	leer clientes[i,1]
+	Escribir "Ingrese el Nombre del cliente"
+	leer clientes[i,2]
+	clientes[i,3] = "ACTIVO"	
+FinSubProceso
 
 SubProceso reinicio_base_clientes(clientes)
 	para i = 0 hasta 19 con paso 1 Hacer
@@ -98,7 +156,7 @@ SubProceso ordenamiento_clientes_apellido(clientes)
 	Para i<-0 Hasta dim-1 Hacer
 		pos_menor <- i
 		Para j <- i+1 Hasta dim Hacer
-			Si nom_ape[j] < nom_ape[pos_menor] Entonces
+			Si Mayusculas(nom_ape[j]) < Mayusculas(nom_ape[pos_menor]) Entonces
 				pos_menor <- j
 			FinSi
 		FinPara
@@ -201,7 +259,7 @@ FinSubProceso
 
 SubProceso listado_clientes_apellido(clientes)
 	Definir i Como Entero
-	ordenamiento_clientes_apellido(clientes)
+	//ordenamiento_clientes_apellido(clientes)
 	Escribir "<---------------------------------------------------->"
 	Para i=0 Hasta 19 Hacer
 		Si clientes[i,0] <> " " Entonces
